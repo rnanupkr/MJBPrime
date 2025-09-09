@@ -60,7 +60,7 @@
   <div class="container">
     <h1>MJB Prime</h1>
     <h2>Member Login</h2>
-    <form onsubmit="return validateLogin(event)">
+    <form id="loginForm">
       <input type="text" id="username" placeholder="Username" required><br>
       <input type="password" id="password" placeholder="Password" required><br>
       <button type="submit">Login</button>
@@ -73,17 +73,17 @@
       "rajesh_408": "mjbrajesh408"
     };
 
-    function validateLogin(event) {
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
       event.preventDefault();
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
 
       if (users[username] && users[username] === password) {
         window.location.href = "pending.html";
       } else {
         window.location.href = "error.html";
       }
-    }
+    });
   </script>
 </body>
 </html>
