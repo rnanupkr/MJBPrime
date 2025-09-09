@@ -1,139 +1,163 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MJB Prime Vikas Samiti - Coming Soon</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>About Us - एम. जे. बी. प्राइम विकास समिति</title>
     <style>
-        * {
-            box-sizing: border-box;
+        body {
+            font-family: Verdana, Geneva, sans-serif;
             margin: 0;
             padding: 0;
-            font-family: 'Roboto', sans-serif;
+            background-color: #fefefe;
+            color: #333;
         }
 
-        body {
-            background: linear-gradient(135deg, #1e90ff, #63a4ff);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        /* Top Menu */
+        .topmenu {
+            background-color: #003366;
+            overflow: hidden;
+            padding: 10px 0;
         }
-
-        header {
-            background-color: rgba(0,0,0,0.6);
-            padding: 20px 40px;
-            text-align: center;
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        nav {
-            background-color: rgba(255,255,255,0.1);
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        nav a {
-            color: #fff;
+        .topmenu a {
+            color: #ffffff;
             text-decoration: none;
-            margin: 8px 12px;
-            font-weight: 500;
-            transition: all 0.3s;
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 10px 20px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .topmenu a:hover {
+            background-color: #002244;
         }
 
-        nav a:hover {
-            background-color: rgba(255,255,255,0.2);
+        /* Page content */
+        .content {
+            padding: 20px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
-        main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        h1 {
+            font-size: 28px;
+            color: #003366;
             text-align: center;
-            padding: 40px 20px;
+            margin-bottom: 10px;
         }
 
-        .message-box {
-            background-color: rgba(0,0,0,0.6);
-            padding: 40px 30px;
-            border-radius: 12px;
-            max-width: 800px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-        }
-
-        .message-box h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: #ffdd57;
-        }
-
-        .message-box p {
+        .intro {
+            background: #e6f2ff;
+            padding: 20px;
+            border-left: 6px solid #003366;
+            border-radius: 8px;
+            margin-bottom: 30px;
             font-size: 18px;
             line-height: 1.6;
-            color: #fff;
         }
 
-        footer {
+        h2 {
+            color: #003366;
             text-align: center;
-            padding: 15px;
-            background-color: rgba(0,0,0,0.6);
-            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+        table th, table td {
+            border: 1px solid #003366;
+            padding: 10px;
+            text-align: left;
+            font-size: 16px;
+        }
+        table th {
+            background-color: #003366;
+            color: white;
+        }
+        table tr:nth-child(even) {
+            background-color: #f2f9ff;
+        }
+        table tr:hover {
+            background-color: #d0e7ff;
         }
 
         @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                align-items: center;
+            .content {
+                padding: 20px;
             }
-            .message-box {
-                padding: 30px 20px;
+            table th, table td {
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        MJB Prime Vikas Samiti
-    </header>
-
-    <nav>
+    <!-- Top Menu -->
+    <div class="topmenu">
+        <a href="index.html">Home</a>
+        <a href="rules.html">Rules & Regulations</a>
         <a href="about.html">About Us</a>
-        <a href="members.html">Members</a>
-        <a href="image.html">Image Gallery</a>
-        <a href="society.html">Society Information</a>
-        <a href="collections.html">This Month Collection Details</a>
-        <a href="expense.html">Expense Details</a>
-        <a href="pending.html">List of Pending Maintenance</a>
-        <a href="notice.html">Notices</a>
-        <a href="disclaimer.html">Disclaimer</a>
-        <a href="tender.html">Tenders</a>
-        <a href="feedback.html">Feedback</a>
-    </nav>
+        <a href="contact.html">Contact</a>
+    </div>
 
-    <main>
-        <div class="message-box">
-            <h2>Information Coming Soon</h2>
-            <p>
-                We are currently preparing the details for this section. Please check back shortly to access the complete information.  
-                Our team is working to provide you with a modern, comprehensive, and easy-to-navigate experience.
-            </p>
+    <div class="content">
+        <h1>एम. जे. बी. प्राइम विकास समिति</h1>
+        
+        <div class="intro">
+            हम 40 परिवारों का एक मजबूत और जुड़ा हुआ परिवार हैं। हम एक-दूसरे के साथ खड़े रहते हैं, एक-दूसरे के साथ उत्सव मनाते हैं और हर त्योहार का आनंद लेते हैं। हमारी शक्ति हमारी एकता और आपसी सम्मान में है। हम जाति, क्षेत्र या धर्म से ऊपर उठकर केवल मानवीय जुड़ाव और अखंडता का प्रदर्शन करते हैं। हमारे परिवार हमेशा साथ रहते हैं, खुशियाँ बाँटते हैं और कठिनाइयों में भी एक-दूसरे का सहारा बनते हैं।
         </div>
-    </main>
 
-    <footer>
-        Site managed and maintained by Site Administrator: Anup
-    </footer>
+        <h2>40 फ्लैट्स के विवरण</h2>
+    <table>
+    <tr>
+        <th>Flat No.</th>
+        <th>Name</th>
+        <th>Name in Hindi</th>
+    </tr>
+    <tr><td>101</td><td>NATHAWAT SOMENDRA SINGH</td><td>श्री नाथावत सोमेंद्र सिंह</td></tr>
+    <tr><td>102</td><td>NATHAWAT SOMENDRA SINGH</td><td>श्री नाथावत सोमेंद्र सिंह</td></tr>
+    <tr><td>103</td><td>KRISHAN GOPAL KHATRI</td><td>श्री कृष्ण गोपाल खत्री</td></tr>
+    <tr><td>104</td><td>RAMAVATAR SONI & KIRAN SONI</td><td>श्री रामावतार सोनी & किरण सोनी</td></tr>
+    <tr><td>105</td><td>VIJAY KUMAR VYAS & PUSHPA VYAS</td><td>श्री विजय कुमार व्यास & पुष्पा व्यास</td></tr>
+    <tr><td>106</td><td>MR. Predeep Ji</td><td>श्री प्रदीप जी</td></tr>
+    <tr><td>107</td><td>SHUKLA MONDAL & DEVKINANDAN</td><td>श्रीमती शुक्ला मंडल & देवकीनंदन</td></tr>
+    <tr><td>108</td><td>KRISHNA KUNJ</td><td>कृष्ण कुंज</td></tr>
+    <tr><td>109</td><td>NISHA SINGH & R.K SINGH</td><td>श्रीमती निशा सिंह & आर. के. सिंह</td></tr>
+    <tr><td>110</td><td>OM PRAKASH MAHESHWARI</td><td>श्री ओम प्रकाश महेश्वरी</td></tr>
+    <tr><td>201</td><td>JAGJEET SINGH</td><td>श्री जगजीत सिंह</td></tr>
+    <tr><td>202</td><td>PAYAL VIKASH KUMAR</td><td>श्री पायल विकास कुमार</td></tr>
+    <tr><td>203</td><td>ANAND SINGH SHEKHAWAT</td><td>श्रीआनंद सिंह शेखावत</td></tr>
+    <tr><td>204</td><td>PAWAN MAMTA SONI</td><td>श्री पवन ममता सोनी</td></tr>
+    <tr><td>205</td><td>NARENDRA JAIN & MEGHA JAIN</td><td>श्री नरेन्द्र जैन & मेघा जैन</td></tr>
+    <tr><td>206</td><td>AJAY KUMAR DWIVEDI</td><td>श्री अजय कुमार द्विवेदी</td></tr>
+    <tr><td>207</td><td>DHRUV ASHOK BHARGAVA</td><td>ध्श्रीरुव अशोक भार्गव</td></tr>
+    <tr><td>208</td><td>RUPENDRA SINGH</td><td>श्री रूपेन्द्र सिंह</td></tr>
+    <tr><td>209</td><td>SHAMBHUDAYAL SHARMA & KAMLADEVI SHARMA</td><td>श्री शम्भुदयाल शर्मा & कमलादेवी शर्मा</td></tr>
+    <tr><td>210</td><td>MALKA PAREEK & VIPUL PAREEK</td><td>श्रीमती मालका पारीक & विपुल पारीक</td></tr>
+    <tr><td>301</td><td>MJB PRIME</td><td>एमजेबी प्राइम</td></tr>
+    <tr><td>302</td><td>SHARWAN KUMAR TAKHAR</td><td>श्री श्रवण कुमार तख़र</td></tr>
+    <tr><td>303</td><td>KAILASH SHARMA</td><td>श्री कैलाश शर्मा</td></tr>
+    <tr><td>304</td><td>MAHENDRA BHAMA & SUDHA BHAMA</td><td>श्री महेंद्र भामा & सुधा भामा</td></tr>
+    <tr><td>305</td><td>ANUP KUMAR & SURVI</td><td>श्री अनुप कुमार & सुरवी</td></tr>
+    <tr><td>306</td><td>AMIT SINGHAL & KAVITA SINGHAL</td><td>श्री अमित सिंघल & कविता सिंघल</td></tr>
+    <tr><td>307</td><td>KARTHIK & REENA MISHRA</td><td>श्री कार्तिक & रीना मिश्रा</td></tr>
+    <tr><td>308</td><td>RAJENDRA SINGH SHEKHAWAT</td><td>श्री राजेंद्र सिंह शेखावत</td></tr>
+    <tr><td>309</td><td>ROHIT VINEETA SOGANI</td><td>श्री रोहित विनीता सोगानी</td></tr>
+    <tr><td>310</td><td>AMRIT KUMAR ROY & PURABI ROY</td><td>श्री अमृत कुमार रॉय & पुरबी रॉय</td></tr>
+    <tr><td>401</td><td>TARA MANI SETHI & MOHIT SETHI</td><td>श्री तारा मनी सेठी & मोहित सेठी</td></tr>
+    <tr><td>402</td><td>RAVI KUMAR SHARMA</td><td>श्री रवि कुमार शर्मा</td></tr>
+    <tr><td>403</td><td>INDERJEET SHARMA</td><td>श्री इंदरजीत शर्मा</td></tr>
+    <tr><td>404</td><td>KARNIDAN RAMDEV SONI</td><td>श्री करणीदान रामदेव सोनी</td></tr>
+    <tr><td>405</td><td>PRATAP SINGH RATHORE</td><td>श्री प्रताप सिंह राठौड़</td></tr>
+    <tr><td>406</td><td>VIKASH AGARWAL</td><td>श्री विकाश अग्रवाल</td></tr>
+    <tr><td>407</td><td>SHARAVAN JI</td><td>श्री श्रवण जी</td></tr>
+    <tr><td>408</td><td>RAJESH JANGIR & MANISHA JANGIR</td><td>श्री राजेश जांगिर & मनीषा जांगिर</td></tr>
+    <tr><td>409</td><td>GUNJAN GANGWAL</td><td>श्री गुंजन गंगवाल</td></tr>
+    <tr><td>410</td><td>SAKSHI DWIVEDI & SHOBHIT AWASTHI</td><td>श्री साक्षी द्विवेदी & शोभित अवस्थी</td></tr>
+</table>
+    </div>
 
 </body>
 </html>
