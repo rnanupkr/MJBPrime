@@ -1,18 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Access Denied</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #ffe6e6; text-align: center; padding: 50px; }
-    h1 { color: #c0392b; }
-    p { font-size: 18px; color: #555; }
-    a { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #007BFF; color: white; text-decoration: none; border-radius: 5px; }
-    a:hover { background: #0056b3; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    h1 {
+      color: #e74c3c;
+      margin-bottom: 1rem;
+    }
+    p {
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+    a {
+      display: inline-block;
+      background: #0078D7;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    a:hover {
+      background: #005a9e;
+    }
   </style>
 </head>
 <body>
-  <h1>❌ Access Denied</h1>
-  <p>The username or password you entered is incorrect.</p>
-  <a href="login.html">🔑 Try Again</a>
+  <div class="container">
+    <h1>Access Denied</h1>
+    <p>The credentials you entered are incorrect. Please try again.</p>
+    <a href="index.html">Return to Home Page</a>
+  </div>
 </body>
 </html>

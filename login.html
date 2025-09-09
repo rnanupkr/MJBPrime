@@ -1,40 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login - Pending Maintenance</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MJB Prime Login</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; text-align: center; padding: 50px; }
-    .login-box { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); display: inline-block; }
-    input { padding: 10px; margin: 8px; border: 1px solid #ccc; border-radius: 5px; width: 220px; }
-    button { padding: 10px 25px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #0056b3; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      width: 350px;
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: 1rem;
+      font-weight: normal;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      background: #0078D7;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #005a9e;
+    }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>MJB Prime</h1>
+    <h2>Member Login</h2>
+    <form onsubmit="return validateLogin(event)">
+      <input type="text" id="username" placeholder="Username" required><br>
+      <input type="password" id="password" placeholder="Password" required><br>
+      <button type="submit">Login</button>
+    </form>
+  </div>
 
-<div class="login-box">
-  <h2>🔒 Pending Maintenance Access</h2>
-  <input type="text" id="username" placeholder="Username"><br>
-  <input type="password" id="password" placeholder="Password"><br>
-  <button onclick="login()">Login</button>
-</div>
+  <script>
+    const users = {
+      "anup_305": "mjb305",
+      "rajesh_408": "mjbrajesh408"
+    };
 
-<script>
-  const users = {
-    "anup_305": "mjb305",
-    "rajesh_408": "mjbrajesh408"
-  };
+    function validateLogin(event) {
+      event.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
 
-  function login() {
-    const u = document.getElementById("username").value;
-    const p = document.getElementById("password").value;
-    if (users[u] && users[u] === p) {
-      window.location.href = "pending.html"; // ✅ correct → show page
-    } else {
-      window.location.href = "error.html";   // ❌ wrong → show error page
+      if (users[username] && users[username] === password) {
+        window.location.href = "pending.html";
+      } else {
+        window.location.href = "error.html";
+      }
     }
-  }
-</script>
-
+  </script>
 </body>
 </html>
