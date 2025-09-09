@@ -70,6 +70,21 @@
             max-width: 800px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
+.home-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 18px;
+    background-color: #ffdd57;
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.home-link:hover {
+    background-color: #ffc107;
+}
 
         .message-box h2 {
             font-size: 32px;
@@ -98,6 +113,7 @@
             .message-box {
                 padding: 30px 20px;
             }
+        
         }
     </style>
 </head>
@@ -125,6 +141,7 @@
         <div class="message-box">
             <h2>Information Coming Soon</h2>
             <p>
+                <a href="index.html" class="home-link">⬅ Return to Home Page</a>
                 We are currently preparing the details for this section. Please check back shortly to access the complete information.  
                 Our team is working to provide you with a modern, comprehensive, and easy-to-navigate experience.
             </p>
