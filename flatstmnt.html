@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MJB Prime Vikas Samiti - Flat Statement</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #fafafa; }
+    header { background: #003366; color: #fff; padding: 20px; text-align: center; }
+    nav { background: #0055a5; padding: 10px; text-align: center; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 20px; }
+    h2 { color: #003366; }
+    input, button { padding: 8px; margin: 5px; }
+    button { background: #0055a5; color: white; border: none; cursor: pointer; border-radius: 4px; }
+    button:hover { background: #003366; }
+    table { border-collapse: collapse; margin-top: 20px; width: 100%; background: #fff; }
+    th, td { border: 1px solid #666; padding: 8px; text-align: left; }
+    th { background: #f2f2f2; }
+    #result p { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>MJB Prime Vikas Samiti</h1>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="rules.html">Rules & Regulations</a>
+  <a href="members.html">Members</a>
+  <a href="flatstmnt.html">Flat Statement</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<main>
+  <h2>Flat Bill Statement</h2>
+  <label for="flatNo">Enter Flat No:</label>
+  <input type="text" id="flatNo" placeholder="e.g. 101">
+  <button onclick="searchFlat()">Submit</button>
+
+  <div id="result"></div>
+</main>
+
+<script>
+  let data = [];
+
+  // Load JSON dynamically
+  fetch("flats.json")
+    .then(response => response.json())
+    .then(json => { data = json; })
+    .catch(err => {
+      document.getElementById("result").innerHTML = "<p>Error loading data.</p>";
+      console.error("Error loading flats.json:", err);
+    });
+
+  function searchFlat() {
+    const flatNo = document.getElementById("flatNo").value.trim();
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = "";
+
+    if (!flatNo) {
+      resultDiv.innerHTML = "<p>Please enter a flat number.</p>";
+      return;
+    }
+
+    const record = data.find(d => d.Flat === flatNo);
+
+    if (record) {
+      let table = `<table>
+        <tr><th>Flat No</th><th>Name</th><th>Month</th><th>Year</th><th>Bill Amount</th>
+            <th>Received Amount</th><th>Mode</th><th>Pending Amount</th><th>Remarks</th></tr>
+        <tr>
+          <td>${record.Flat}</td>
+          <td>${record.Name}</td>
+          <td>${record.Month}</td>
+          <td>${record.Year}</td>
+          <td>${record.Bill}</td>
+          <td>${record.Received}</td>
+          <td>${record.Mode}</td>
+          <td>${record.Pending}</td>
+          <td>${record.Remarks}</td>
+        </tr>
+      </table>`;
+      resultDiv.innerHTML = table;
+    } else {
+      resultDiv.innerHTML = "<p>No record found for Flat No " + flatNo + "</p>";
+    }
+  }
+</script>
+
+</body>
+</html>
