@@ -50,19 +50,18 @@
 fetch("https://raw.githubusercontent.com/rnanupkr/MJBPrime/main/flats.json")
   .then(response => {
     console.log("Response status:", response.status, response.statusText);
-    if (!response.ok) {
-      throw new Error("Network error: " + response.status + " " + response.statusText);
-    }
-    return response.json();
+    return response.text(); // first get raw text
   })
-  .then(json => {
-    data = json;
-    console.log("✅ JSON loaded:", data.length, "rows");
+  .then(text => {
+    console.log("Raw response:", text.substring(0, 200)); // print first 200 chars
+    data = JSON.parse(text); // manually parse JSON
+    console.log("✅ Parsed JSON:", data.length, "records");
   })
   .catch(err => {
     document.getElementById("result").innerHTML = "<p>Error loading data.</p>";
     console.error("❌ Error loading flats.json:", err);
   });
+
   function searchFlat() {
     const flatNo = document.getElementById("flatNo").value.trim();
     const resultDiv = document.getElementById("result");
