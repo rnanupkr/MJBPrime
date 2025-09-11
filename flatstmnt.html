@@ -20,8 +20,10 @@
     th, td { border:1px solid #ddd; padding:8px; text-align:center; font-size:14px; }
     th { background:#007bff; color:white; }
     tr:nth-child(even){ background:#f7f9fc; }
+    tr.total-row { font-weight:700; background:#f1f1f1; }
     .msg { margin-top:12px; color:#c0392b; font-weight:600; text-align:center; }
     .info { margin-top:8px; color:#2d7a2d; font-weight:600; text-align:center; }
+    .performance { margin-bottom:12px; color:#2c3e50; font-weight:700; text-align:center; font-size:16px; }
     @media (max-width: 600px) { th, td { font-size:12px; padding:4px 6px; } }
   </style>
 </head>
@@ -57,6 +59,7 @@
       <button id="searchBtn" disabled>Submit</button>
     </div>
 
+    <div id="performance" class="performance"></div>
     <div id="result"></div>
   </div>
 
@@ -70,67 +73,66 @@
     const monthSelect = document.getElementById("monthSelect");
     const yearSelect = document.getElementById("yearSelect");
     const searchBtn = document.getElementById("searchBtn");
+    const resultDiv = document.getElementById("result");
+    const performanceDiv = document.getElementById("performance");
 
-    function updateInputState() {
-  const resultDiv = document.getElementById("result");
+    function updateInputState(clickedCheckbox){
+      resultDiv.innerHTML = "";
+      performanceDiv.innerHTML = "";
 
-  // Clear previous results
-  resultDiv.innerHTML = "";
+      if(clickedCheckbox === 'flat'){
+        monthCheck.checked = false;
+        flatNo.disabled = false;
+        monthSelect.disabled = true;
+        yearSelect.disabled = true;
+        flatNo.value = "";
+        monthSelect.value = "";
+        yearSelect.value = "";
+        searchBtn.disabled = false;
+      } else if(clickedCheckbox === 'month'){
+        flatCheck.checked = false;
+        flatNo.disabled = true;
+        monthSelect.disabled = false;
+        yearSelect.disabled = false;
+        flatNo.value = "";
+        monthSelect.value = "";
+        yearSelect.value = "";
+        searchBtn.disabled = false;
+      } else {
+        flatNo.disabled = true;
+        monthSelect.disabled = true;
+        yearSelect.disabled = true;
+        flatNo.value = "";
+        monthSelect.value = "";
+        yearSelect.value = "";
+        searchBtn.disabled = true;
+      }
+    }
 
-  if(flatCheck.checked){
-    flatNo.disabled = false;
-    monthSelect.disabled = true;
-    yearSelect.disabled = true;
-    searchBtn.disabled = false;
-
-    // Reset other inputs
-    monthSelect.value = "";
-    yearSelect.value = "";
-    monthCheck.checked = false;
-    flatNo.value = "";
-  } else if(monthCheck.checked){
-    flatNo.disabled = true;
-    monthSelect.disabled = false;
-    yearSelect.disabled = false;
-    searchBtn.disabled = false;
-
-    // Reset other inputs
-    flatNo.value = "";
-    flatCheck.checked = false;
-    monthSelect.value = "";
-    yearSelect.value = "";
-  } else {
-    flatNo.disabled = true;
-    monthSelect.disabled = true;
-    yearSelect.disabled = true;
-    searchBtn.disabled = true;
-
-    // Reset all inputs
-    flatNo.value = "";
-    monthSelect.value = "";
-    yearSelect.value = "";
-  }
-}
-
-
-    flatCheck.addEventListener("change", updateInputState);
-    monthCheck.addEventListener("change", updateInputState);
+    flatCheck.addEventListener("click", () => updateInputState('flat'));
+    monthCheck.addEventListener("click", () => updateInputState('month'));
 
     // Load JSON
     fetch(JSON_URL)
       .then(resp => { if(!resp.ok) throw new Error(resp.status); return resp.text(); })
       .then(txt => { data = JSON.parse(txt); })
-      .catch(err => { document.getElementById("result").innerHTML = "<div class='msg'>Error loading data.</div>"; console.error(err); });
+      .catch(err => { resultDiv.innerHTML = "<div class='msg'>Error loading data.</div>"; console.error(err); });
 
     function escapeHtml(s) { return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
 
-    function searchFlat() {
-      const resultDiv = document.getElementById("result");
+    function parseAmount(str){
+      return Number((str||"0").replace(/[₹,]/g,''));
+    }
+
+    function searchFlat(){
       resultDiv.innerHTML = "";
+      performanceDiv.innerHTML = "";
 
       if(!data.length){ resultDiv.innerHTML = "<div class='msg'>Data not loaded yet.</div>"; return; }
 
       let matches = [];
+      let isMonthSearch = false;
+
       if(flatCheck.checked){
         const f = flatNo.value.trim();
         if(!f){ resultDiv.innerHTML = "<div class='msg'>Please enter a Flat No.</div>"; return; }
@@ -139,6 +141,7 @@
         const m = monthSelect.value, y = yearSelect.value;
         if(!m || !y){ resultDiv.innerHTML = "<div class='msg'>Please select Month and Year.</div>"; return; }
         matches = data.filter(item => (item["Month"]||"")===m && (item["Year"]||"")===y);
+        isMonthSearch = true;
       } else {
         resultDiv.innerHTML = "<div class='msg'>Please select a search criteria.</div>";
         return;
@@ -146,26 +149,51 @@
 
       if(!matches.length){ resultDiv.innerHTML = "<div class='msg'>No record found.</div>"; return; }
 
+      let totalBill = 0, totalReceived = 0, totalPending = 0;
       let html = `<table><thead>
         <tr>
           <th>Flat No</th><th>Name</th><th>Month</th><th>Year</th>
           <th>Bill Amount</th><th>Received Amount</th><th>Mode</th><th>Pending Amount</th><th>Remarks</th>
         </tr></thead><tbody>`;
 
-      html += matches.map(rec => `<tr>
-        <td>${escapeHtml(rec["Flat No"]||"")}</td>
-        <td>${escapeHtml(rec["Name"]||"")}</td>
-        <td>${escapeHtml(rec["Month"]||"")}</td>
-        <td>${escapeHtml(rec["Year"]||"")}</td>
-        <td>${escapeHtml(rec["Bill Amount"]||"")}</td>
-        <td>${escapeHtml(rec["Received Amount"]||"")}</td>
-        <td>${escapeHtml(rec["Mode"]||"")}</td>
-        <td>${escapeHtml(rec["Pending Amount"]||"")}</td>
-        <td>${escapeHtml(rec["Remarks"]||"")}</td>
-      </tr>`).join("");
+      matches.forEach(rec => {
+        const bill = parseAmount(rec["Bill Amount"]);
+        const received = parseAmount(rec["Received Amount"]);
+        const pending = parseAmount(rec["Pending Amount"]);
+        totalBill += bill;
+        totalReceived += received;
+        totalPending += pending;
 
+        html += `<tr>
+          <td>${escapeHtml(rec["Flat No"]||"")}</td>
+          <td>${escapeHtml(rec["Name"]||"")}</td>
+          <td>${escapeHtml(rec["Month"]||"")}</td>
+          <td>${escapeHtml(rec["Year"]||"")}</td>
+          <td>${escapeHtml(rec["Bill Amount"]||"")}</td>
+          <td>${escapeHtml(rec["Received Amount"]||"")}</td>
+          <td>${escapeHtml(rec["Mode"]||"")}</td>
+          <td>${escapeHtml(rec["Pending Amount"]||"")}</td>
+          <td>${escapeHtml(rec["Remarks"]||"")}</td>
+        </tr>`;
+      });
+
+      // Add totals row
+      html += `<tr class="total-row">
+        <td colspan="4">Total</td>
+        <td>₹${totalBill.toLocaleString('en-IN', {minimumFractionDigits:2})}</td>
+        <td>₹${totalReceived.toLocaleString('en-IN', {minimumFractionDigits:2})}</td>
+        <td></td>
+        <td>₹${totalPending.toLocaleString('en-IN', {minimumFractionDigits:2})}</td>
+        <td></td>
+      </tr>`;
       html += "</tbody></table>";
       resultDiv.innerHTML = html;
+
+      // Show performance factor if month search
+      if(isMonthSearch){
+        const factor = totalBill ? ((totalReceived/totalBill)*100).toFixed(2) : "0.00";
+        performanceDiv.innerHTML = `Society Performance Factor: ${factor}%`;
+      }
     }
 
     searchBtn.addEventListener("click", searchFlat);
