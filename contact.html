@@ -50,10 +50,21 @@
             border-radius: 8px;
             font-size: 18px;
             line-height: 1.6;
+            text-align: center;
         }
 
         .contact-info p {
             margin: 10px 0;
+        }
+
+        .qr-code {
+            margin-top: 20px;
+        }
+        .qr-code img {
+            max-width: 200px;
+            height: auto;
+            border: 2px solid #003366;
+            border-radius: 8px;
         }
 
         @media (max-width: 768px) {
@@ -62,6 +73,9 @@
             }
             .contact-info {
                 font-size: 16px;
+            }
+            .qr-code img {
+                max-width: 150px;
             }
         }
     </style>
@@ -86,6 +100,11 @@
             <p><strong>ईमेल:</strong> mjbprimej@gmail.com</p>
 
             <p>किसी भी प्रश्न, लेन-देन, बकाया राशि या अन्य किसी जानकारी के लिए हमें निःसंकोच संपर्क करें। हमें आपकी सहायता करने में खुशी होगी।</p>
+
+            <div class="qr-code">
+                <p><strong>Scan QR Code TO Make Payments to MJB Prime Vikas Samiti:</strong></p>
+                <img src="mjbqr.jpeg" alt="MJB QR Code">
+            </div>
         </div>
     </div>
 
