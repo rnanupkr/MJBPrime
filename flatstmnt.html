@@ -61,23 +61,28 @@
     let data = [];
     const JSON_URL = "https://raw.githubusercontent.com/rnanupkr/MJBPrime/main/flats.json";
 
-    // Load JSON from GitHub
+    // Load JSON
     fetch(JSON_URL)
       .then(resp => {
         if (!resp.ok) throw new Error("Network error " + resp.status);
         return resp.text();
       })
       .then(txt => {
-        try { data = JSON.parse(txt); } 
-        catch(e) { 
-          console.error("JSON parse error:", e); 
-          document.getElementById("result").innerHTML = "<div class='msg'>Invalid JSON format.</div>"; 
+        try {
+          data = JSON.parse(txt);
+        } catch (e) {
+          console.error("JSON parse error:", e);
+          document.getElementById("result").innerHTML = "<div class='msg'>Invalid JSON format.</div>";
         }
       })
       .catch(err => {
         console.error("Error loading flats.json:", err);
         document.getElementById("result").innerHTML = "<div class='msg'>Error loading data.</div>";
       });
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
+    }
 
     function searchFlat() {
       const resultDiv = document.getElementById("result");
@@ -89,10 +94,14 @@
         return;
       }
 
-      // Filter ALL rows matching the Flat No
+      if (!data.length) {
+        resultDiv.innerHTML = "<div class='msg'>Data not loaded yet. Please wait...</div>";
+        return;
+      }
+
       const matches = data.filter(item => (item["Flat No"] || "").trim() === flatNo);
 
-      if (matches.length === 0) {
+      if (!matches.length) {
         resultDiv.innerHTML = `<div class='msg'>No record found for Flat No ${flatNo}</div>`;
         return;
       }
@@ -111,4 +120,19 @@
           <td>${escapeHtml(String(rec["Month"] || ""))}</td>
           <td>${escapeHtml(String(rec["Year"] || ""))}</td>
           <td>${escapeHtml(String(rec["Bill Amount"] || ""))}</td>
-          <td>${escape
+          <td>${escapeHtml(String(rec["Received Amount"] || ""))}</td>
+          <td>${escapeHtml(String(rec["Mode"] || ""))}</td>
+          <td>${escapeHtml(String(rec["Pending Amount"] || ""))}</td>
+          <td>${escapeHtml(String(rec["Remarks"] || ""))}</td>
+        </tr>`;
+      }).join("");
+
+      html += "</tbody></table>";
+      resultDiv.innerHTML = html;
+    }
+
+    document.getElementById("searchBtn").addEventListener("click", searchFlat);
+    document.getElementById("flatNo").addEventListener("keydown", e => { if (e.key === "Enter") searchFlat(); });
+  </script>
+</body>
+</html>
