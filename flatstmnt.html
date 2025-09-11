@@ -1,93 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>MJB Prime Vikas Samiti - Flat Statement</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f8f9fa; }
-    h1 { text-align: center; color: #2c3e50; }
-    .search-box { text-align: center; margin: 20px; }
-    input[type="text"] { padding: 6px; font-size: 14px; width: 180px; }
-    button { padding: 6px 12px; font-size: 14px; margin-left: 5px; cursor: pointer; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; background: white; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #007bff; color: white; }
-    tr:nth-child(even) { background: #f2f2f2; }
-    #result { margin-top: 20px; }
+    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 0; background:#f8f9fa; color:#222; }
+    header { background:#2c3e50; padding:15px 0; text-align:center; color:white; }
+    header h1 { margin:0; font-size:24px; }
+    nav { background:#34495e; display:flex; justify-content:center; padding:8px 0; }
+    nav a { color:white; text-decoration:none; padding:8px 16px; font-weight:600; }
+    nav a:hover { background:#1abc9c; color:white; border-radius:4px; }
+    .container { max-width:1200px; margin:20px auto; padding:0 15px; }
+    .search-box { text-align:center; margin-bottom:20px; }
+    input[type="text"] { padding:8px; width:200px; font-size:14px; border:1px solid #ccc; border-radius:4px; }
+    button { padding:8px 12px; margin-left:6px; font-size:14px; cursor:pointer; border:none; border-radius:4px; background:#007bff; color:white; }
+    button:hover { background:#0056b3; }
+    #status { margin-left:12px; font-size:13px; color:#666; }
+    table { border-collapse: collapse; width:100%; margin-top:12px; background:white; }
+    th, td { border:1px solid #ddd; padding:8px; text-align:center; font-size:14px; }
+    th { background:#007bff; color:white; }
+    tr:nth-child(even){ background:#f7f9fc; }
+    .msg { margin-top:12px; color:#c0392b; font-weight:600; text-align:center; }
+    .info { margin-top:8px; color:#2d7a2d; font-weight:600; text-align:center; }
   </style>
 </head>
 <body>
-  <h1>MJB Prime Vikas Samiti</h1>
+  <header>
+    <h1>MJB Prime Vikas Samiti</h1>
+  </header>
 
-  <div class="search-box">
-    <label for="flatNo">Enter Flat No: </label>
-    <input type="text" id="flatNo" placeholder="e.g., 101">
-    <button onclick="searchFlat()">Submit</button>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="flatstmnt.html">Flat Statement</a>
+    <a href="rules.html">Rules & Regulations</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <div class="container">
+    <div class="search-box">
+      <label for="flatNo"><strong>Enter Flat No:</strong></label>
+      <input id="flatNo" type="text" placeholder="e.g. 101" autocomplete="off" />
+      <button id="searchBtn">Submit</button>
+      <span id="status">Loading data...</span>
+    </div>
+
+    <div id="result"></div>
   </div>
-
-  <div id="result"></div>
 
   <script>
     let data = [];
+    let dataLoaded = false;
 
-    // Load JSON dynamically
-    fetch("https://raw.githubusercontent.com/rnanupkr/MJBPrime/main/flats.json")
-      .then(response => response.text()) // GitHub serves JSON as text/plain
-      .then(text => {
+    const JSON_URL = "https://raw.githubusercontent.com/rnanupkr/MJBPrime/main/flats.json";
+
+    fetch(JSON_URL)
+      .then(resp => {
+        if (!resp.ok) throw new Error("Network error " + resp.status);
+        return resp.text();
+      })
+      .then(txt => {
         try {
-          data = JSON.parse(text);
-          console.log("✅ JSON loaded:", data.length, "records");
+          data = JSON.parse(txt);
+          dataLoaded = true;
+          document.getElementById("status").textContent = `Loaded ${data.length} records`;
+          console.log("JSON loaded:", data.length, "records");
         } catch (e) {
-          console.error("❌ JSON parse error:", e);
-          document.getElementById("result").innerHTML = "<p>Invalid JSON format.</p>";
+          console.error("JSON parse error:", e);
+          document.getElementById("status").textContent = "Invalid JSON format";
+          document.getElementById("result").innerHTML = "<div class='msg'>Invalid JSON format. Fix flats.json.</div>";
         }
       })
       .catch(err => {
-        console.error("❌ Error loading flats.json:", err);
-        document.getElementById("result").innerHTML = "<p>Error loading data.</p>";
+        console.error("Error loading flats.json:", err);
+        document.getElementById("status").textContent = "Error loading data";
+        document.getElementById("result").innerHTML = "<div class='msg'>Error loading data. See console for details.</div>";
       });
 
     function searchFlat() {
-      const flatNo = document.getElementById("flatNo").value.trim();
       const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
 
-      if (!flatNo) {
-        resultDiv.innerHTML = "<p style='color:red;'>Please enter a Flat No.</p>";
+      if (!dataLoaded) {
+        resultDiv.innerHTML = "<div class='msg'>Data not loaded yet — please wait a moment and try again.</div>";
         return;
       }
 
-      // Match on "Flat No" field
-      const record = data.find(item => String(item["Flat No"]).trim() === flatNo);
-
-      if (record) {
-        resultDiv.innerHTML = `
-          <table>
-            <tr>
-              <th>Flat No</th>
-              <th>Name</th>
-              <th>Month</th>
-              <th>Year</th>
-              <th>Bill Amount</th>
-              <th>Received Amount</th>
-              <th>Mode</th>
-              <th>Pending Amount</th>
-            </tr>
-            <tr>
-              <td>${record["Flat No"]}</td>
-              <td>${record["Name"]}</td>
-              <td>${record["Month"]}</td>
-              <td>${record["Year"]}</td>
-              <td>${record["Bill Amount"]}</td>
-              <td>${record["Received Amount"]}</td>
-              <td>${record["Mode"]}</td>
-              <td>${record["Pending Amount"]}</td>
-            </tr>
-          </table>
-        `;
-      } else {
-        resultDiv.innerHTML = `<p style="color:red;">No record found for Flat No ${flatNo}</p>`;
+      const flatNo = document.getElementById("flatNo").value.trim();
+      if (!flatNo) {
+        resultDiv.innerHTML = "<div class='msg'>Please enter a Flat No.</div>";
+        return;
       }
+
+      const matches = data.filter(item => {
+        const key = item["Flat No"] !== undefined ? String(item["Flat No"]).trim() : "";
+        return key === flatNo;
+      });
+
+      if (matches.length === 0) {
+        resultDiv.innerHTML = `<div class='msg'>No record found for Flat No ${flatNo}</div>`;
+        return;
+      }
+
+      let html = `<div class="info">${matches.length} record(s) found for Flat No ${flatNo}</div>`;
+      html += `<table><thead>
+        <tr>
+          <th>Flat No</th><th>Name</th><th>Month</th><th>Year</th>
+          <th>Bill Amount</th><th>Received Amount</th><th>Mode</th><th>Pending Amount</th>
+        </tr></thead><tbody>`;
+
+      html += matches.map(rec => {
+        return `<tr>
+          <td>${escapeHtml(String(rec["Flat No"] || ""))}</td>
+          <td>${escapeHtml(String(rec["Name"] || ""))}</td>
+          <td>${escapeHtml(String(rec["Month"] || ""))}</td>
+          <td>${escapeHtml(String(rec["Year"] || ""))}</td>
+          <td>${escapeHtml(String(rec["Bill Amount"] || ""))}</td>
+          <td>${escapeHtml(String(rec["Received Amount"] || ""))}</td>
+          <td>${escapeHtml(String(rec["Mode"] || ""))}</td>
+          <td>${escapeHtml(String(rec["Pending Amount"] || ""))}</td>
+        </tr>`;
+      }).join("");
+
+      html += "</tbody></table>";
+      resultDiv.innerHTML = html;
     }
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, function(m){
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m];
+      });
+    }
+
+    document.getElementById("searchBtn").addEventListener("click", searchFlat);
+    document.getElementById("flatNo").addEventListener("keydown", function(e){
+      if(e.key === "Enter") searchFlat();
+    });
   </script>
 </body>
 </html>
