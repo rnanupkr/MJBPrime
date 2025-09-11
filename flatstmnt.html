@@ -47,14 +47,21 @@
   let data = [];
 
   // Load JSON dynamically
-  fetch("https://raw.githubusercontent.com/rnanupkr/MJBPrime/refs/heads/main/flats.json")
-    .then(response => response.json())
-    .then(json => { data = json; })
-    .catch(err => {
-      document.getElementById("result").innerHTML = "<p>Error loading data.</p>";
-      console.error("Error loading flats.json:", err);
-    });
-
+fetch("https://raw.githubusercontent.com/rnanupkr/MJBPrime/main/flats.json")
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok " + response.statusText);
+    }
+    return response.json();
+  })
+  .then(json => { 
+    data = json; 
+    console.log("✅ flats.json loaded successfully:", data.length, "records");
+  })
+  .catch(err => {
+    document.getElementById("result").innerHTML = "<p>Error loading data.</p>";
+    console.error("Error loading flats.json:", err);
+  });
   function searchFlat() {
     const flatNo = document.getElementById("flatNo").value.trim();
     const resultDiv = document.getElementById("result");
