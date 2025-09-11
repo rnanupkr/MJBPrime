@@ -24,6 +24,7 @@
     .msg { margin-top:12px; color:#c0392b; font-weight:600; text-align:center; }
     .info { margin-top:8px; color:#2d7a2d; font-weight:600; text-align:center; }
     .performance { margin-bottom:12px; color:#2c3e50; font-weight:700; text-align:center; font-size:16px; }
+    .disclaimer { margin-top:15px; font-size:12px; color:#555; text-align:center; line-height:1.4em; }
     @media (max-width: 600px) { th, td { font-size:12px; padding:4px 6px; } }
   </style>
 </head>
@@ -61,6 +62,11 @@
 
     <div id="performance" class="performance"></div>
     <div id="result"></div>
+
+    <div class="disclaimer">
+      The information displayed is based on records provided by the respective authorities. The Site Administrator is not responsible for the authenticity or accuracy of these records. For any discrepancies, please contact the Site Administrator for correction.<br>
+      Site Managed by Site Admin: Anup
+    </div>
   </div>
 
   <script>
@@ -82,6 +88,7 @@
 
       if(clickedCheckbox === 'flat'){
         monthCheck.checked = false;
+        monthCheck.disabled = false;
         flatNo.disabled = false;
         monthSelect.disabled = true;
         yearSelect.disabled = true;
@@ -91,6 +98,7 @@
         searchBtn.disabled = false;
       } else if(clickedCheckbox === 'month'){
         flatCheck.checked = false;
+        flatCheck.disabled = false;
         flatNo.disabled = true;
         monthSelect.disabled = false;
         yearSelect.disabled = false;
@@ -177,15 +185,18 @@
         </tr>`;
       });
 
-      // Add totals row
-      html += `<tr class="total-row">
-        <td colspan="4">Total</td>
-        <td>₹${totalBill.toLocaleString('en-IN', {minimumFractionDigits:2})}</td>
-        <td>₹${totalReceived.toLocaleString('en-IN', {minimumFractionDigits:2})}</td>
-        <td></td>
-        <td>₹${totalPending.toLocaleString('en-IN', {minimumFractionDigits:2})}</td>
-        <td></td>
-      </tr>`;
+      // Add totals row only for Month search
+      if(isMonthSearch){
+        html += `<tr class="total-row">
+          <td colspan="4">Total</td>
+          <td>₹${totalBill.toLocaleString('en-IN', {minimumFractionDigits:2})}</td>
+          <td>₹${totalReceived.toLocaleString('en-IN', {minimumFractionDigits:2})}</td>
+          <td></td>
+          <td>₹${totalPending.toLocaleString('en-IN', {minimumFractionDigits:2})}</td>
+          <td></td>
+        </tr>`;
+      }
+
       html += "</tbody></table>";
       resultDiv.innerHTML = html;
 
