@@ -49,18 +49,19 @@
   // Load JSON dynamically
 fetch("https://raw.githubusercontent.com/rnanupkr/MJBPrime/main/flats.json")
   .then(response => {
+    console.log("Response status:", response.status, response.statusText);
     if (!response.ok) {
-      throw new Error("Network response was not ok " + response.statusText);
+      throw new Error("Network error: " + response.status + " " + response.statusText);
     }
     return response.json();
   })
-  .then(json => { 
-    data = json; 
-    console.log("✅ flats.json loaded successfully:", data.length, "records");
+  .then(json => {
+    data = json;
+    console.log("✅ JSON loaded:", data.length, "rows");
   })
   .catch(err => {
     document.getElementById("result").innerHTML = "<p>Error loading data.</p>";
-    console.error("Error loading flats.json:", err);
+    console.error("❌ Error loading flats.json:", err);
   });
   function searchFlat() {
     const flatNo = document.getElementById("flatNo").value.trim();
