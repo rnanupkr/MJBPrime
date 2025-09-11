@@ -8,31 +8,21 @@
     body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin:0; background:#f8f9fa; color:#222; }
     header { background:#2c3e50; padding:15px 0; text-align:center; color:white; }
     header h1 { margin:0; font-size:24px; }
-    nav { background:#34495e; display:flex; justify-content:center; padding:8px 0; }
+    nav { background:#34495e; display:flex; justify-content:center; padding:8px 0; flex-wrap:wrap; }
     nav a { color:white; text-decoration:none; padding:8px 16px; font-weight:600; }
     nav a:hover { background:#1abc9c; color:white; border-radius:4px; }
     .container { max-width:1200px; margin:20px auto; padding:0 15px; }
     .search-box { text-align:center; margin-bottom:20px; }
-    input[type="text"] { padding:8px; width:200px; font-size:14px; border:1px solid #ccc; border-radius:4px; }
-    button { padding:8px 12px; margin-left:6px; font-size:14px; cursor:pointer; border:none; border-radius:4px; background:#007bff; color:white; }
+    input[type="text"], select { padding:8px; margin:4px; font-size:14px; border:1px solid #ccc; border-radius:4px; }
+    button { padding:8px 12px; margin:4px; font-size:14px; cursor:pointer; border:none; border-radius:4px; background:#007bff; color:white; }
     button:hover { background:#0056b3; }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      max-width: 100%;
-      overflow-x: auto;
-      display: block; /* allows horizontal scrolling on mobile */
-      background:white;
-    }
+    table { border-collapse: collapse; width: 100%; max-width: 100%; overflow-x: auto; display: block; background:white; }
     th, td { border:1px solid #ddd; padding:8px; text-align:center; font-size:14px; }
     th { background:#007bff; color:white; }
     tr:nth-child(even){ background:#f7f9fc; }
     .msg { margin-top:12px; color:#c0392b; font-weight:600; text-align:center; }
     .info { margin-top:8px; color:#2d7a2d; font-weight:600; text-align:center; }
-
-    @media (max-width: 600px) {
-      th, td { font-size:12px; padding:4px 6px; }
-    }
+    @media (max-width: 600px) { th, td { font-size:12px; padding:4px 6px; } }
   </style>
 </head>
 <body>
@@ -49,9 +39,22 @@
 
   <div class="container">
     <div class="search-box">
-      <label for="flatNo"><strong>Enter Flat No:</strong></label>
-      <input id="flatNo" type="text" placeholder="e.g. 101" autocomplete="off" />
-      <button id="searchBtn">Submit</button>
+      <label><input type="checkbox" id="flatCheck"> Search by Flat No</label>
+      <label style="margin-left:20px;"><input type="checkbox" id="monthCheck"> Search by Month & Year</label>
+      <br><br>
+      <input id="flatNo" type="text" placeholder="e.g. 101" disabled />
+      <select id="monthSelect" disabled>
+        <option value="">Select Month</option>
+        <option>January</option><option>February</option><option>March</option>
+        <option>April</option><option>May</option><option>June</option>
+        <option>July</option><option>August</option><option>September</option>
+        <option>October</option><option>November</option><option>December</option>
+      </select>
+      <select id="yearSelect" disabled>
+        <option value="">Select Year</option>
+        <option>2023</option><option>2024</option><option>2025</option>
+      </select>
+      <button id="searchBtn" disabled>Submit</button>
     </div>
 
     <div id="result"></div>
@@ -61,78 +64,93 @@
     let data = [];
     const JSON_URL = "https://raw.githubusercontent.com/rnanupkr/MJBPrime/main/flats.json";
 
+    const flatCheck = document.getElementById("flatCheck");
+    const monthCheck = document.getElementById("monthCheck");
+    const flatNo = document.getElementById("flatNo");
+    const monthSelect = document.getElementById("monthSelect");
+    const yearSelect = document.getElementById("yearSelect");
+    const searchBtn = document.getElementById("searchBtn");
+
+    function updateInputState() {
+      if(flatCheck.checked){
+        flatNo.disabled = false;
+        monthSelect.disabled = true;
+        yearSelect.disabled = true;
+        searchBtn.disabled = false;
+        monthCheck.checked = false;
+      } else if(monthCheck.checked){
+        flatNo.disabled = true;
+        monthSelect.disabled = false;
+        yearSelect.disabled = false;
+        searchBtn.disabled = false;
+        flatCheck.checked = false;
+      } else {
+        flatNo.disabled = true;
+        monthSelect.disabled = true;
+        yearSelect.disabled = true;
+        searchBtn.disabled = true;
+      }
+    }
+
+    flatCheck.addEventListener("change", updateInputState);
+    monthCheck.addEventListener("change", updateInputState);
+
     // Load JSON
     fetch(JSON_URL)
-      .then(resp => {
-        if (!resp.ok) throw new Error("Network error " + resp.status);
-        return resp.text();
-      })
-      .then(txt => {
-        try {
-          data = JSON.parse(txt);
-        } catch (e) {
-          console.error("JSON parse error:", e);
-          document.getElementById("result").innerHTML = "<div class='msg'>Invalid JSON format.</div>";
-        }
-      })
-      .catch(err => {
-        console.error("Error loading flats.json:", err);
-        document.getElementById("result").innerHTML = "<div class='msg'>Error loading data.</div>";
-      });
+      .then(resp => { if(!resp.ok) throw new Error(resp.status); return resp.text(); })
+      .then(txt => { data = JSON.parse(txt); })
+      .catch(err => { document.getElementById("result").innerHTML = "<div class='msg'>Error loading data.</div>"; console.error(err); });
 
-    function escapeHtml(s) {
-      return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
-    }
+    function escapeHtml(s) { return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
 
     function searchFlat() {
       const resultDiv = document.getElementById("result");
       resultDiv.innerHTML = "";
 
-      const flatNo = document.getElementById("flatNo").value.trim();
-      if (!flatNo) {
-        resultDiv.innerHTML = "<div class='msg'>Please enter a Flat No.</div>";
+      if(!data.length){ resultDiv.innerHTML = "<div class='msg'>Data not loaded yet.</div>"; return; }
+
+      let matches = [];
+      if(flatCheck.checked){
+        const f = flatNo.value.trim();
+        if(!f){ resultDiv.innerHTML = "<div class='msg'>Please enter a Flat No.</div>"; return; }
+        matches = data.filter(item => (item["Flat No"]||"").trim()===f);
+      } else if(monthCheck.checked){
+        const m = monthSelect.value, y = yearSelect.value;
+        if(!m || !y){ resultDiv.innerHTML = "<div class='msg'>Please select Month and Year.</div>"; return; }
+        matches = data.filter(item => (item["Month"]||"")===m && (item["Year"]||"")===y);
+      } else {
+        resultDiv.innerHTML = "<div class='msg'>Please select a search criteria.</div>";
         return;
       }
 
-      if (!data.length) {
-        resultDiv.innerHTML = "<div class='msg'>Data not loaded yet. Please wait...</div>";
-        return;
-      }
+      if(!matches.length){ resultDiv.innerHTML = "<div class='msg'>No record found.</div>"; return; }
 
-      const matches = data.filter(item => (item["Flat No"] || "").trim() === flatNo);
-
-      if (!matches.length) {
-        resultDiv.innerHTML = `<div class='msg'>No record found for Flat No ${flatNo}</div>`;
-        return;
-      }
-
-      let html = `<div class="info">${matches.length} record(s) found for Flat No ${flatNo}</div>`;
-      html += `<table><thead>
+      let html = `<table><thead>
         <tr>
           <th>Flat No</th><th>Name</th><th>Month</th><th>Year</th>
           <th>Bill Amount</th><th>Received Amount</th><th>Mode</th><th>Pending Amount</th><th>Remarks</th>
         </tr></thead><tbody>`;
 
-      html += matches.map(rec => {
-        return `<tr>
-          <td>${escapeHtml(String(rec["Flat No"] || ""))}</td>
-          <td>${escapeHtml(String(rec["Name"] || ""))}</td>
-          <td>${escapeHtml(String(rec["Month"] || ""))}</td>
-          <td>${escapeHtml(String(rec["Year"] || ""))}</td>
-          <td>${escapeHtml(String(rec["Bill Amount"] || ""))}</td>
-          <td>${escapeHtml(String(rec["Received Amount"] || ""))}</td>
-          <td>${escapeHtml(String(rec["Mode"] || ""))}</td>
-          <td>${escapeHtml(String(rec["Pending Amount"] || ""))}</td>
-          <td>${escapeHtml(String(rec["Remarks"] || ""))}</td>
-        </tr>`;
-      }).join("");
+      html += matches.map(rec => `<tr>
+        <td>${escapeHtml(rec["Flat No"]||"")}</td>
+        <td>${escapeHtml(rec["Name"]||"")}</td>
+        <td>${escapeHtml(rec["Month"]||"")}</td>
+        <td>${escapeHtml(rec["Year"]||"")}</td>
+        <td>${escapeHtml(rec["Bill Amount"]||"")}</td>
+        <td>${escapeHtml(rec["Received Amount"]||"")}</td>
+        <td>${escapeHtml(rec["Mode"]||"")}</td>
+        <td>${escapeHtml(rec["Pending Amount"]||"")}</td>
+        <td>${escapeHtml(rec["Remarks"]||"")}</td>
+      </tr>`).join("");
 
       html += "</tbody></table>";
       resultDiv.innerHTML = html;
     }
 
-    document.getElementById("searchBtn").addEventListener("click", searchFlat);
-    document.getElementById("flatNo").addEventListener("keydown", e => { if (e.key === "Enter") searchFlat(); });
+    searchBtn.addEventListener("click", searchFlat);
+    flatNo.addEventListener("keydown", e => { if(e.key==="Enter") searchFlat(); });
+    monthSelect.addEventListener("keydown", e => { if(e.key==="Enter") searchFlat(); });
+    yearSelect.addEventListener("keydown", e => { if(e.key==="Enter") searchFlat(); });
   </script>
 </body>
 </html>
