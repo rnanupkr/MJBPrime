@@ -72,25 +72,46 @@
     const searchBtn = document.getElementById("searchBtn");
 
     function updateInputState() {
-      if(flatCheck.checked){
-        flatNo.disabled = false;
-        monthSelect.disabled = true;
-        yearSelect.disabled = true;
-        searchBtn.disabled = false;
-        monthCheck.checked = false;
-      } else if(monthCheck.checked){
-        flatNo.disabled = true;
-        monthSelect.disabled = false;
-        yearSelect.disabled = false;
-        searchBtn.disabled = false;
-        flatCheck.checked = false;
-      } else {
-        flatNo.disabled = true;
-        monthSelect.disabled = true;
-        yearSelect.disabled = true;
-        searchBtn.disabled = true;
-      }
-    }
+  const resultDiv = document.getElementById("result");
+
+  // Clear previous results
+  resultDiv.innerHTML = "";
+
+  if(flatCheck.checked){
+    flatNo.disabled = false;
+    monthSelect.disabled = true;
+    yearSelect.disabled = true;
+    searchBtn.disabled = false;
+
+    // Reset other inputs
+    monthSelect.value = "";
+    yearSelect.value = "";
+    monthCheck.checked = false;
+    flatNo.value = "";
+  } else if(monthCheck.checked){
+    flatNo.disabled = true;
+    monthSelect.disabled = false;
+    yearSelect.disabled = false;
+    searchBtn.disabled = false;
+
+    // Reset other inputs
+    flatNo.value = "";
+    flatCheck.checked = false;
+    monthSelect.value = "";
+    yearSelect.value = "";
+  } else {
+    flatNo.disabled = true;
+    monthSelect.disabled = true;
+    yearSelect.disabled = true;
+    searchBtn.disabled = true;
+
+    // Reset all inputs
+    flatNo.value = "";
+    monthSelect.value = "";
+    yearSelect.value = "";
+  }
+}
+
 
     flatCheck.addEventListener("change", updateInputState);
     monthCheck.addEventListener("change", updateInputState);
