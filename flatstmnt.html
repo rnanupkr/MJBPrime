@@ -47,7 +47,7 @@
   let data = [];
 
   // Load JSON dynamically
-  fetch("flats.json")
+  fetch("https://raw.githubusercontent.com/yourusername/mjbprime/main/flats.json")
     .then(response => response.json())
     .then(json => { data = json; })
     .catch(err => {
