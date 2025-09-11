@@ -49,13 +49,19 @@
   // Load JSON dynamically
 fetch("https://raw.githubusercontent.com/rnanupkr/MJBPrime/main/flats.json")
   .then(response => {
-    console.log("Response status:", response.status, response.statusText);
-    return response.text(); // first get raw text
+    if (!response.ok) {
+      throw new Error("Network response was not ok " + response.statusText);
+    }
+    return response.text(); // get plain text
   })
   .then(text => {
-    console.log("Raw response:", text.substring(0, 200)); // print first 200 chars
-    data = JSON.parse(text); // manually parse JSON
-    console.log("✅ Parsed JSON:", data.length, "records");
+    try {
+      data = JSON.parse(text); // manually parse JSON
+      console.log("✅ JSON loaded:", data.length, "records");
+    } catch (e) {
+      console.error("❌ JSON parse error:", e, text.substring(0, 200));
+      document.getElementById("result").innerHTML = "<p>Invalid JSON format.</p>";
+    }
   })
   .catch(err => {
     document.getElementById("result").innerHTML = "<p>Error loading data.</p>";
