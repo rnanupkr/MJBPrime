@@ -4,104 +4,90 @@
   <meta charset="UTF-8">
   <title>MJB Prime Vikas Samiti - Flat Statement</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #fafafa; }
-    header { background: #003366; color: #fff; padding: 20px; text-align: center; }
-    nav { background: #0055a5; padding: 10px; text-align: center; }
-    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
-    nav a:hover { text-decoration: underline; }
-    main { padding: 20px; }
-    h2 { color: #003366; }
-    input, button { padding: 8px; margin: 5px; }
-    button { background: #0055a5; color: white; border: none; cursor: pointer; border-radius: 4px; }
-    button:hover { background: #003366; }
-    table { border-collapse: collapse; margin-top: 20px; width: 100%; background: #fff; }
-    th, td { border: 1px solid #666; padding: 8px; text-align: left; }
-    th { background: #f2f2f2; }
-    #result p { color: red; font-weight: bold; }
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f8f9fa; }
+    h1 { text-align: center; color: #2c3e50; }
+    .search-box { text-align: center; margin: 20px; }
+    input[type="text"] { padding: 6px; font-size: 14px; width: 180px; }
+    button { padding: 6px 12px; font-size: 14px; margin-left: 5px; cursor: pointer; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; background: white; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background: #007bff; color: white; }
+    tr:nth-child(even) { background: #f2f2f2; }
+    #result { margin-top: 20px; }
   </style>
 </head>
 <body>
-
-<header>
   <h1>MJB Prime Vikas Samiti</h1>
-</header>
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="rules.html">Rules & Regulations</a>
-  <a href="members.html">Members</a>
-  <a href="flatstmnt.html">Flat Statement</a>
-  <a href="contact.html">Contact</a>
-</nav>
-
-<main>
-  <h2>Flat Bill Statement</h2>
-  <label for="flatNo">Enter Flat No:</label>
-  <input type="text" id="flatNo" placeholder="e.g. 101">
-  <button onclick="searchFlat()">Submit</button>
+  <div class="search-box">
+    <label for="flatNo">Enter Flat No: </label>
+    <input type="text" id="flatNo" placeholder="e.g., 101">
+    <button onclick="searchFlat()">Submit</button>
+  </div>
 
   <div id="result"></div>
-</main>
 
-<script>
-  let data = [];
+  <script>
+    let data = [];
 
-  // Load JSON dynamically
-fetch("https://raw.githubusercontent.com/rnanupkr/MJBPrime/main/flats.json")
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok " + response.statusText);
+    // Load JSON dynamically
+    fetch("https://raw.githubusercontent.com/rnanupkr/MJBPrime/main/flats.json")
+      .then(response => response.text()) // GitHub serves JSON as text/plain
+      .then(text => {
+        try {
+          data = JSON.parse(text);
+          console.log("✅ JSON loaded:", data.length, "records");
+        } catch (e) {
+          console.error("❌ JSON parse error:", e);
+          document.getElementById("result").innerHTML = "<p>Invalid JSON format.</p>";
+        }
+      })
+      .catch(err => {
+        console.error("❌ Error loading flats.json:", err);
+        document.getElementById("result").innerHTML = "<p>Error loading data.</p>";
+      });
+
+    function searchFlat() {
+      const flatNo = document.getElementById("flatNo").value.trim();
+      const resultDiv = document.getElementById("result");
+
+      if (!flatNo) {
+        resultDiv.innerHTML = "<p style='color:red;'>Please enter a Flat No.</p>";
+        return;
+      }
+
+      // Match on "Flat No" field
+      const record = data.find(item => String(item["Flat No"]).trim() === flatNo);
+
+      if (record) {
+        resultDiv.innerHTML = `
+          <table>
+            <tr>
+              <th>Flat No</th>
+              <th>Name</th>
+              <th>Month</th>
+              <th>Year</th>
+              <th>Bill Amount</th>
+              <th>Received Amount</th>
+              <th>Mode</th>
+              <th>Pending Amount</th>
+            </tr>
+            <tr>
+              <td>${record["Flat No"]}</td>
+              <td>${record["Name"]}</td>
+              <td>${record["Month"]}</td>
+              <td>${record["Year"]}</td>
+              <td>${record["Bill Amount"]}</td>
+              <td>${record["Received Amount"]}</td>
+              <td>${record["Mode"]}</td>
+              <td>${record["Pending Amount"]}</td>
+            </tr>
+          </table>
+        `;
+      } else {
+        resultDiv.innerHTML = `<p style="color:red;">No record found for Flat No ${flatNo}</p>`;
+      }
     }
-    return response.text(); // get plain text
-  })
-  .then(text => {
-    try {
-      data = JSON.parse(text); // manually parse JSON
-      console.log("✅ JSON loaded:", data.length, "records");
-    } catch (e) {
-      console.error("❌ JSON parse error:", e, text.substring(0, 200));
-      document.getElementById("result").innerHTML = "<p>Invalid JSON format.</p>";
-    }
-  })
-  .catch(err => {
-    document.getElementById("result").innerHTML = "<p>Error loading data.</p>";
-    console.error("❌ Error loading flats.json:", err);
-  });
-
-  function searchFlat() {
-    const flatNo = document.getElementById("flatNo").value.trim();
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = "";
-
-    if (!flatNo) {
-      resultDiv.innerHTML = "<p>Please enter a flat number.</p>";
-      return;
-    }
-
-    const record = data.find(d => d.Flat === flatNo);
-
-    if (record) {
-      let table = `<table>
-        <tr><th>Flat No</th><th>Name</th><th>Month</th><th>Year</th><th>Bill Amount</th>
-            <th>Received Amount</th><th>Mode</th><th>Pending Amount</th><th>Remarks</th></tr>
-        <tr>
-          <td>${record.Flat}</td>
-          <td>${record.Name}</td>
-          <td>${record.Month}</td>
-          <td>${record.Year}</td>
-          <td>${record.Bill}</td>
-          <td>${record.Received}</td>
-          <td>${record.Mode}</td>
-          <td>${record.Pending}</td>
-          <td>${record.Remarks}</td>
-        </tr>
-      </table>`;
-      resultDiv.innerHTML = table;
-    } else {
-      resultDiv.innerHTML = "<p>No record found for Flat No " + flatNo + "</p>";
-    }
-  }
-</script>
-
+  </script>
 </body>
 </html>
