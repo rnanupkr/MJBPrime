@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MJB Prime Vikas Samiti</title>
-    <!-- Google Fonts -->
+
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <!-- CSS Styles -->
+
     <style>
         * {
             box-sizing: border-box;
@@ -16,32 +16,52 @@
         }
 
         body {
-            background-color: #f5f6fa;
+            background: #f5f6fa;
             color: #333;
             display: flex;
-            min-height: 100vh;
             flex-direction: column;
+            min-height: 100vh;
         }
 
         header {
-            background-color: #1e90ff;
+            background: #1e90ff;
             color: white;
             padding: 20px 40px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }
 
         header h1 {
             font-size: 28px;
         }
 
+        .app-link {
+            color: white;
+            text-decoration: none;
+            border: 1px solid white;
+            padding: 8px 14px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .app-link:hover {
+            background: white;
+            color: #1e90ff;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+        }
+
         nav {
-            background-color: #ffffff;
             width: 220px;
-            flex-shrink: 0;
+            background: white;
             border-right: 1px solid #ddd;
             padding: 20px;
+            flex-shrink: 0;
         }
 
         nav a {
@@ -50,7 +70,6 @@
             text-decoration: none;
             margin-bottom: 15px;
             font-weight: 500;
-            transition: 0.3s;
         }
 
         nav a:hover {
@@ -59,20 +78,19 @@
 
         main {
             flex: 1;
-            padding: 30px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            padding: 30px;
         }
 
         .content {
-            max-width: 900px;
             width: 100%;
-            background-color: white;
-            padding: 30px;
+            max-width: 900px;
+            background: white;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 30px;
             text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .content img {
@@ -82,77 +100,103 @@
             border-radius: 10px;
         }
 
-        .address, .description {
+        .address,
+        .description {
             margin: 15px 0;
-            font-size: 16px;
             line-height: 1.6;
         }
 
         footer {
-            background-color: #1e90ff;
+            background: #1e90ff;
             color: white;
             text-align: center;
             padding: 15px;
-            font-size: 14px;
         }
 
-        .container {
-            display: flex;
-            flex: 1;
-        }
+        @media (max-width:768px) {
 
-        @media (max-width: 768px) {
             .container {
                 flex-direction: column;
             }
+
             nav {
                 width: 100%;
                 border-right: none;
                 border-bottom: 1px solid #ddd;
             }
+
+            header {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <header>
-        <h1>MJB Prime Vikas Samiti</h1>
-    </header>
+<header>
+    <h1>MJB Prime Vikas Samiti</h1>
 
-    <div class="container">
-        <nav>
-            <a href="about.html">About Us</a>
-            <a href="members.html">Members</a>
-            <a href="rules.html">Rules and Regulations</a>
-            <a href="image.html">Image Gallery</a>
-            <a href="maintenance.html">Flat Wise Maintenance</a>
-            <a href="collections.html">This Month Collection Details</a>
-            <a href="login.html">Expense Details</a>
-            <a href="loginS.html">Flat Wise Statement</a>
-            <a href="notice.html">Notices</a>
-            <a href="disclaimer.html">Disclaimer</a>
-            <a href="tender.html">Tenders</a>
-            <a href="contact.html">Contact Us</a>
-        </nav>
+    <a id="ec2Link" class="app-link" href="#" target="_blank">
+        Application
+    </a>
+</header>
 
-        <main>
-            <div class="content">
-                <h2>Welcome to MJB Prime Vikas Samiti</h2>
-                <p class="address">
-                    Address: Plot No. C6, MJB Prime, Mangalam City, Kalwar Road, Hathoj, Jaipur
-                </p>
-                <p class="description">
-                    MJB Prime Vikas Samiti is a residential society comprising <strong>40 flats</strong>. 
-                    We strive to maintain a harmonious and well-managed community for all residents.
-                </p>
-                <img src="mjb.gif" alt="MJB Prime Image">
-            </div>
-        </main>
-    </div>
+<div class="container">
 
-    <footer>
-        Site managed and maintained by Site Administrator: Anup
-    </footer>
+    <nav>
+        <a href="about.html">About Us</a>
+        <a href="rules.html">Rules and Regulations</a>
+        <a href="contact.html">Contact Us</a>
+    </nav>
+
+    <main>
+
+        <div class="content">
+
+            <h2>Welcome to MJB Prime Vikas Samiti</h2>
+
+            <p class="address">
+                Address: Plot No. C6, MJB Prime, Mangalam City,
+                Kalwar Road, Hathoj, Jaipur
+            </p>
+
+            <p class="description">
+                MJB Prime Vikas Samiti is a residential society comprising
+                <strong>40 flats</strong>. We strive to maintain a harmonious
+                and well-managed community for all residents.
+            </p>
+
+            <img src="mjb.gif" alt="MJB Prime Image">
+
+        </div>
+
+    </main>
+
+</div>
+
+<footer>
+    Site managed and maintained by Site Administrator: Anup
+</footer>
+
+<script>
+fetch("host.cfg")
+    .then(response => response.text())
+    .then(text => {
+        const match = text.match(/HOST\s*=\s*(.+)/);
+
+        if (match) {
+            const host = match[1].trim();
+            const link = document.getElementById("ec2Link");
+
+            link.href = "http://" + host;
+        }
+    })
+    .catch(err => {
+        console.error("Unable to load host.cfg", err);
+    });
+</script>
 
 </body>
 </html>
