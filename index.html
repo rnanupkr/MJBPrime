@@ -190,7 +190,7 @@ fetch("host.cfg")
             const host = match[1].trim();
             const link = document.getElementById("ec2Link");
 
-            link.href = "http://" + host;
+            link.href = "http://" + host + ":3000";
         }
     })
     .catch(err => {
