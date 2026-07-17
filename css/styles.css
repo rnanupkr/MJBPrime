@@ -1,0 +1,20 @@
+/* Premium Ivory Theme */
+:root{
+--bg:#F8F6F2;--card:#fff;--text:#2F2C28;--muted:#6B675F;--accent:#A67C52;--border:#E7E1D7;
+}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{position:sticky;top:0;background:#2F2C28;color:#fff;padding:18px 8%;display:flex;justify-content:space-between;align-items:center}
+.logo h1{margin:0;font-size:28px}.logo small{color:#ddd}
+nav a{color:#f5f5f5;text-decoration:none;margin-left:24px}
+nav a:hover,nav a.active{color:#d7b892}
+.hero{padding:70px 8%;text-align:center}
+.hero img{max-width:900px;width:100%;border-radius:18px;box-shadow:0 15px 40px rgba(0,0,0,.15)}
+.container{width:min(1100px,92%);margin:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;margin:40px 0}
+.card{background:#fff;border:1px solid var(--border);padding:24px;border-radius:18px;box-shadow:0 8px 25px rgba(0,0,0,.06);transition:.3s}
+.card:hover{transform:translateY(-5px)}
+.btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 18px;border-radius:30px;text-decoration:none}
+footer{margin-top:60px;background:#2F2C28;color:#ddd;padding:25px;text-align:center}
+.rule{margin-bottom:18px}
+.contact{display:grid;grid-template-columns:2fr 1fr;gap:30px}
+@media(max-width:800px){header{flex-direction:column;gap:12px}.contact{grid-template-columns:1fr}}
